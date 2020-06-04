@@ -1,3 +1,15 @@
+export type NewsQuery = {
+    category?: Category;
+    language?: Language;
+    requiredKeywords: string[];
+    optionalKeywords: string[];
+    excludedKeywords: string[];
+}
+
+export type HeadlineQuery = NewsQuery & {
+    country?: HeadlineCountry;
+}
+
 export type ArticleResponse = {
     status: string;
     totalResults: number;
@@ -20,7 +32,7 @@ export type ArticleSource = {
     name?: string;
 }
 
-export type  Source = ArticleSource & {
+export type Source = ArticleSource & {
     description: string;
     url: string;
     category: Category;
@@ -37,3 +49,5 @@ export type HeadlineCountry = 'ae' | 'ar' | 'at' | 'au' | 'be' | 'bg' | 'br' | '
 export type SourceCountry = 'ae' | 'ar' | 'at' | 'au' | 'be' | 'bg' | 'br' | 'ca' | 'ch' | 'cn' | 'co' | 'cu' | 'cz' | 'de' | 'eg' | 'fr' | 'gb' | 'gr' | 'hk' | 'hu' | 'id' | 'ie' | 'il' | 'in' | 'it' | 'jp' | 'kr' | 'lt' | 'lv' | 'ma' | 'mx' | 'my' | 'ng' | 'nl' | 'no' | 'nz' | 'ph' | 'pl' | 'pt' | 'ro' | 'rs' | 'ru' | 'sa' | 'se' | 'sg' | 'si' | 'sk' | 'th' | 'tr' | 'tw' | 'ua' | 'us' | 've' | 'za';
 
 export type Status = 'ok' | 'error';
+
+export type SortOrder = 'relevancy' | 'popularity' | 'publishedAt' | 'relevancy';
