@@ -2,13 +2,10 @@ import React from 'react';
 import getNewsService from '../../../service/news';
 import { NewsQuery } from '../../../lib/api/types';
 import { NewsArticle } from '../../../lib/client/types';
+import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFeed';
 
 
-interface IHomePageProps {
-
-}
-
-const HomePage: React.FC<IHomePageProps> = props => {
+const NewsFeed: React.FC = () => {
     const [articles, setArticles] = React.useState<NewsArticle[]>([])
     const [error, setError] = React.useState<string | undefined>(undefined);
 
@@ -30,7 +27,7 @@ const HomePage: React.FC<IHomePageProps> = props => {
                         description: a.description ? a.description : 'Failed to load description.',
                         imageUrl: a.urlToImage ? a.urlToImage : 'https://via.placeholder.com/166',
                         articleUrl: a.url ? a.url : '',
-                        sourceName: a.author ? a.author : 'Unknown source'
+                        sourceName: a.source?.name ? a.source?.name : 'Unknown source'
                     }
                 })
             )).catch(error => setError(error))
@@ -41,17 +38,13 @@ const HomePage: React.FC<IHomePageProps> = props => {
 
     if (error) {
         return (
-            <div>
+            <>
                 Failed to load results: {error}
-            </div>
+            </>
         )
     }
 
-    return (
-        <div>
-            {articles.length}
-        </div>
-    )
+    return (<DisconnectedNewsFeed articles={articles}/>)
 }
 
-export default HomePage;
+export default NewsFeed;

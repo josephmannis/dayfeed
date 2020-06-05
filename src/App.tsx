@@ -1,13 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import HomePage from './connector/pages/home-page/HomePage';
+import HomePage from './components/pages/home-page/HomePage';
+import 'tachyons';
 
 function App() {
   return (
-    <div>
       <HomePage/>
-    </div>
   );
 }
 
