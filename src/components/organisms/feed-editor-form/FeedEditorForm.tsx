@@ -1,5 +1,6 @@
 import React from 'react';
 import { NewsFeed } from '../../../lib/client/types';
+import { Form, FormHeader } from './styled';
 
 
 interface IFeedEditorFormProps {
@@ -8,8 +9,13 @@ interface IFeedEditorFormProps {
 }
 
 const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {
+    const {feed, onFeedChanged} = props;
     return (
-        <div></div>
+        <Form>
+            <FormHeader>
+                <h2>{feed.name}</h2>
+            </FormHeader>
+        </Form>
     )
 }
 
