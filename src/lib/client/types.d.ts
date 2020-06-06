@@ -10,3 +10,14 @@ export type NewsArticle = {
 export type Tag = {
     text: string;
 }
+
+export type NewsFeed = {
+    id: string;
+    name: string;
+    country: string;
+    includedKeywords: string[];
+    excludedKeywords: string[];
+    optionalKeywords: string[];
+    language: string;
+    sources: string[];
+}
