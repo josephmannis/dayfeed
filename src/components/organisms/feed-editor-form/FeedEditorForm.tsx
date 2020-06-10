@@ -9,7 +9,11 @@ import Select from 'react-select';
 
 interface IFeedEditorFormProps {
     feed: NewsFeed;
+    sourceOptions: string[];
+    countryOptions: string[];
+    languageOptions: string[];
     onFeedChanged: (feed: NewsFeed) => void;
+
 }
 
 type Selected = {
@@ -18,7 +22,7 @@ type Selected = {
 }
 
 const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {    
-    const {feed, onFeedChanged} = props;
+    const {feed, sourceOptions, countryOptions, languageOptions, onFeedChanged} = props;
 
     const [requiredKeywords, setRequired] = React.useState<string[]>(feed.includedKeywords);
     const [optionalKeywords, setOptional] = React.useState<string[]>(feed.optionalKeywords);
@@ -38,6 +42,7 @@ const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {
     }, [requiredKeywords, optionalKeywords, sources, topic, country, language, feedName])
 
     const getValues = (options: Selected[]) => options.map(o => o.value);
+    const getSelected = (options: string[]) => options.map(o => {return {label: o, value: o}})
 
     return (
         <Form>
@@ -75,12 +80,12 @@ const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {
             <EditorSection title={CopyProvider.EDITOR_LOCALE_SECTION_TITLE} body={CopyProvider.EDITOR_LOCALE_SECTION_BODY}>
                 <EditorInput>
                     <h4>Country</h4>
-                    <Select onChange={(s) => setCountry((s as Selected).value)}/>
+                    <Select options={getSelected(countryOptions)} onChange={(s) => setCountry((s as Selected).value)}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Language</h4>
-                    <Select onChange={(s) => setLanguage((s as Selected).value)}/>
+                    <Select options={getSelected(languageOptions)} onChange={(s) => setLanguage((s as Selected).value)}/>
                 </EditorInput>
             </EditorSection>
         </Form>
