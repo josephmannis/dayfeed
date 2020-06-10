@@ -38,33 +38,42 @@ const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {
 
 
     React.useEffect(() => {
-        console.log(countryOptions)
-        console.table([requiredKeywords, optionalKeywords, excludedKeywords, sources, topic, country, language, feedName])
+        onFeedChanged({
+            id: feed.id,
+            name: feedName,
+            country: country,
+            includedKeywords: requiredKeywords,
+            excludedKeywords: excludedKeywords,
+            optionalKeywords: optionalKeywords,
+            language: language,
+            sources: sources
+        })
     }, [requiredKeywords, optionalKeywords, sources, topic, country, language, feedName])
 
     const getValues = (options: Selected[]) => options.map(o => o.value);
     const getSelected = (options: string[]) => options.map(o => {return {label: o, value: o}})
 
+    // TODO Fix the react select thing with null when you delete everything
     return (
         <Form>
             <FormHeader>
-                <NameInput defaultValue={feed.name} onChange={(e) => setFeedname(e.target.value)}/>
+                <NameInput value={feed.name} onChange={(e) => setFeedname(e.target.value)}/>
                 <TextButton onClick={() => window.alert('delete feed')}>{`🗑  Delete Feed`}</TextButton>
             </FormHeader>
             <EditorSection title={CopyProvider.EDITOR_KEYWORDS_SECTION_TITLE} body={CopyProvider.EDITOR_KEYWORDS_SECTION_BODY}>
                 <EditorInput>
                     <h4>Required</h4>
-                    <CreatableSelect isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
+                    <CreatableSelect components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }} value={getSelected(feed.includedKeywords)} isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
                 </EditorInput>
                 
                 <EditorInput>
                     <h4>Optional</h4>
-                    <CreatableSelect isMulti onChange={(s) => setOptional(getValues(s as Selected[]))}/>
+                    <CreatableSelect value={getSelected(feed.optionalKeywords)} isMulti onChange={(s) => setOptional(getValues(s as Selected[]))}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Excluded</h4>
-                    <CreatableSelect isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
+                    <CreatableSelect value={getSelected(feed.excludedKeywords)} isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
                 </EditorInput>
             </EditorSection>
             <EditorSection title={CopyProvider.EDITOR_CONTENT_SECTION_TITLE} body={CopyProvider.EDITOR_CONTENT_SECTION_BODY}>

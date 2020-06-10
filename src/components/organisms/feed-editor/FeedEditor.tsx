@@ -3,6 +3,7 @@ import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper } from './st
 import { NewsFeed } from '../../../lib/client/types';
 import FeedEditorForm from '../feed-editor-form/FeedEditorForm';
 import { SourceCountryOptions, LanguageOptions } from '../../../lib/api/types';
+import _ from 'lodash';
 
 
 
@@ -29,9 +30,19 @@ const FeedEditor: React.FC = props => {
         sources: ['wired']
     }
 
-    const feeds = [fake, fake2]
-    const [selectedFeed, setSelected] = React.useState<NewsFeed | undefined>(feeds.length > 0 ? feeds[0] : undefined);
+    const [feeds, setFeeds] = React.useState<NewsFeed[]>([fake, fake2])
+    const [selectedFeed, setSelected] = React.useState<number>(0);
 
+    const updateFeed = (feed: NewsFeed) => {
+        console.log(feed.id)
+        const newFeeds = feeds.map(f => {
+            if (f.id === feed.id) {
+                return feed;
+            }
+            return f;
+        })
+        setFeeds(newFeeds);
+    }
 
     return (
         <Editor>
@@ -40,10 +51,10 @@ const FeedEditor: React.FC = props => {
             </Header>
             <EditorPanels>
                 <Sidebar>
-                    {feeds.map((f,i) => <Cell key={i} selected={selectedFeed?.id === f.id} onClick={() => setSelected(f)}>{f.name}</Cell>)}
+                    {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => {console.log(i); setSelected(i)}}>{f.name}</Cell>)}
                 </Sidebar>
                 <EditorWrapper>
-                    { selectedFeed ? <FeedEditorForm sourceOptions={[]} countryOptions={SourceCountryOptions.slice()} languageOptions={LanguageOptions.slice()} feed={selectedFeed} onFeedChanged={(f) => console.log('updated')}/> : 'You have no Feeds! Create a new one 🌞'}
+                    { feeds.length > 0 ? <FeedEditorForm sourceOptions={[]} countryOptions={SourceCountryOptions.slice()} languageOptions={LanguageOptions.slice()} feed={feeds[selectedFeed]} onFeedChanged={updateFeed}/> : 'You have no Feeds! Create a new one 🌞'}
                 </EditorWrapper>
             </EditorPanels>
         </Editor>
