@@ -4,7 +4,7 @@ export const Editor = styled.div.attrs({className: 'flex flex-column'})``
 export const Header = styled.div.attrs({className: 'w100 pv2 pl3 bb b--light-gray'})``
 export const EditorPanels = styled.div.attrs({className: 'flex'})``
 export const Sidebar = styled.div.attrs({className: 'flex flex-column w30 br b--light-gray'})``
-export const EditorWrapper = styled.div.attrs({className: 'pa4'})``
+export const EditorWrapper = styled.div.attrs({className: 'pv4 pl4 w-100'})``
 
 interface ICellProps {
     selected: boolean;

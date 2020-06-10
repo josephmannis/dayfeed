@@ -27,12 +27,12 @@ export const TextButton = styled.button`
     ${buttonStyle};
     color: ${colors.primary};
     background-color: transparent;
-    font-weight: normal;
+    font-weight: bold;
     text-align: center;
     padding: 0;
 
 
     &:hover {
-       font-weight: bolder;
+       text-decoration: underline;
     }
 `
