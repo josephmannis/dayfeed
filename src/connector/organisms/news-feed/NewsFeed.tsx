@@ -30,7 +30,7 @@ const NewsFeed: React.FC = () => {
                         sourceName: a.source?.name ? a.source?.name : 'Unknown source'
                     }
                 })
-            )).catch(error => setError(error))
+            )).catch(error => {console.log(error); setError('Failed to fetch feed.')})
         }
 
         fetchFeed()
@@ -39,7 +39,7 @@ const NewsFeed: React.FC = () => {
     if (error) {
         return (
             <>
-                Failed to load results: {error}
+                {error}
             </>
         )
     }

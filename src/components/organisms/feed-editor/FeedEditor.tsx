@@ -1,12 +1,11 @@
 import React from 'react';
-import { Editor, Header, EditorPanels, Sidebar, Cell } from './styled';
+import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper } from './styled';
 import { NewsFeed } from '../../../lib/client/types';
+import FeedEditorForm from '../feed-editor-form/FeedEditorForm';
 
 
 
 const FeedEditor: React.FC = props => {
-    const [selectedFeedId, setSelected] = React.useState<string |undefined>(feeds.length > 0 ? feeds[0].id : undefined);
-
     const fake: NewsFeed = {
         id: 'fakefeed1',
         name: 'Top Headlines',
@@ -30,6 +29,8 @@ const FeedEditor: React.FC = props => {
     }
 
     const feeds = [fake, fake2]
+    const [selectedFeed, setSelected] = React.useState<NewsFeed | undefined>(feeds.length > 0 ? feeds[0] : undefined);
+
 
     return (
         <Editor>
@@ -38,11 +39,11 @@ const FeedEditor: React.FC = props => {
             </Header>
             <EditorPanels>
                 <Sidebar>
-                    {feeds.map((f,i) => <Cell selected={selectedFeedId === f.id} onClick={() => setSelected(f.id)}>{f.name}</Cell>)}
+                    {feeds.map((f,i) => <Cell key={i} selected={selectedFeed?.id === f.id} onClick={() => setSelected(f)}>{f.name}</Cell>)}
                 </Sidebar>
-                <div>
-                    HI
-                </div>
+                <EditorWrapper>
+                    { selectedFeed ? <FeedEditorForm feed={selectedFeed} onFeedChanged={(f) => console.log('updated')}/> : 'You have no Feeds! Create a new one 🌞'}
+                </EditorWrapper>
             </EditorPanels>
         </Editor>
     )
