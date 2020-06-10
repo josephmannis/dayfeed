@@ -21,3 +21,4 @@ export type NewsFeed = {
     language: string;
     sources: string[];
 }
+

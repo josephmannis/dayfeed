@@ -2,6 +2,7 @@ import React from 'react';
 import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper } from './styled';
 import { NewsFeed } from '../../../lib/client/types';
 import FeedEditorForm from '../feed-editor-form/FeedEditorForm';
+import { SourceCountryOptions, LanguageOptions } from '../../../lib/api/types';
 
 
 
@@ -42,7 +43,7 @@ const FeedEditor: React.FC = props => {
                     {feeds.map((f,i) => <Cell key={i} selected={selectedFeed?.id === f.id} onClick={() => setSelected(f)}>{f.name}</Cell>)}
                 </Sidebar>
                 <EditorWrapper>
-                    { selectedFeed ? <FeedEditorForm feed={selectedFeed} onFeedChanged={(f) => console.log('updated')}/> : 'You have no Feeds! Create a new one 🌞'}
+                    { selectedFeed ? <FeedEditorForm sourceOptions={[]} countryOptions={SourceCountryOptions.slice()} languageOptions={LanguageOptions.slice()} feed={selectedFeed} onFeedChanged={(f) => console.log('updated')}/> : 'You have no Feeds! Create a new one 🌞'}
                 </EditorWrapper>
             </EditorPanels>
         </Editor>

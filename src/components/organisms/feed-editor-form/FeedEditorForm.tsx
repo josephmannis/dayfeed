@@ -38,6 +38,7 @@ const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {
 
 
     React.useEffect(() => {
+        console.log(countryOptions)
         console.table([requiredKeywords, optionalKeywords, excludedKeywords, sources, topic, country, language, feedName])
     }, [requiredKeywords, optionalKeywords, sources, topic, country, language, feedName])
 
@@ -80,12 +81,12 @@ const FeedEditorForm: React.FC<IFeedEditorFormProps> = props => {
             <EditorSection title={CopyProvider.EDITOR_LOCALE_SECTION_TITLE} body={CopyProvider.EDITOR_LOCALE_SECTION_BODY}>
                 <EditorInput>
                     <h4>Country</h4>
-                    <Select options={getSelected(countryOptions)} onChange={(s) => setCountry((s as Selected).value)}/>
+                    <Select options={getSelected(countryOptions)} value={{label: feed.country, value: feed.country}} onChange={(s) => setCountry((s as Selected).value)}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Language</h4>
-                    <Select options={getSelected(languageOptions)} onChange={(s) => setLanguage((s as Selected).value)}/>
+                    <Select options={getSelected(languageOptions)} value={{label: feed.language, value: feed.language}} onChange={(s) => setLanguage((s as Selected).value)}/>
                 </EditorInput>
             </EditorSection>
         </Form>
