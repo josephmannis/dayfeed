@@ -1,50 +1,129 @@
 import React from 'react';
-import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper } from './styled';
 import { NewsFeed, NewsSource } from '../../../lib/client/types';
-import FeedEditorForm from '../feed-editor-form/FeedEditorForm';
-import { SourceCountryOptions, LanguageOptions, CategoryOptions, Category, Language, SourceCountry } from '../../../lib/api/types';
-import getNewsService from '../../../service/news';
-import { useFeedState, useFeedDispatch } from '../../../state/feedContext';
+import { Editor, Header, EditorInput, NameInput } from './styled';
+import { TextButton } from '../../atoms/button/Button';
+import EditorSection from '../../molecules/editor-section/EditorSection';
+import { CopyProvider } from '../../../strings/strings';
+import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
 
+interface IFeedEditorFormProps {
+    feed: NewsFeed;
+    sourceOptions: NewsSource[];
+    countryOptions: string[];
+    languageOptions: string[];
+    topicOptions: string[];
+    onFeedChanged: (feed: NewsFeed) => void;
+}
 
-const FeedEditor: React.FC = props => {
-    const [sources, setSources] = React.useState<NewsSource[]>([]);
-    const [selectedFeed, setSelected] = React.useState<number>(0);
-    const { feeds } = useFeedState();
-    const dispatch = useFeedDispatch();
+type Selected = {
+    label: string;
+    value: string;
+}
+
+const FeedEditor: React.FC<IFeedEditorFormProps> = props => {    
+    const {feed, sourceOptions, countryOptions, languageOptions, topicOptions, onFeedChanged} = props;
+
+    const nameRef = React.useRef<HTMLInputElement>(null);
+
+    const [requiredKeywords, setRequired] = React.useState<string[]>(feed.includedKeywords);
+    const [optionalKeywords, setOptional] = React.useState<string[]>(feed.optionalKeywords);
+    const [excludedKeywords, setExcluded] = React.useState<string[]>(feed.excludedKeywords);
+
+    const [sources, setSources] = React.useState<NewsSource[]>(feed.sources);
+    const [topic, setTopic] = React.useState<string>('');
+
+    const [country, setCountry] = React.useState<string>(feed.country);
+    const [language, setLanguage] = React.useState<string>(feed.language);
     
+    const [feedName, setFeedname] = React.useState<string>(feed.name);
+
     React.useEffect(() => {
-        async function getSources() {
-            let feed = feeds[selectedFeed];
-            let service = getNewsService();
-            // FIXME Seems unsafe
-            service.getSources(feed.topic as Category, feed.language as Language, feed.country as SourceCountry)
-            .then(res => {
-                let sources: NewsSource[] = []
-                console.log(res)
-                res.forEach(s => { if (s.id && s.name) sources.push({name: s.name, id: s.id}) })
-                setSources(sources);
-            })
+        console.group('Received...')
+        console.log(feed)
+        console.groupEnd()
+        if (nameRef.current) nameRef.current.value = feed.name;
+    })
+
+    React.useEffect(() => {
+        let newFeed = { 
+            id: feed.id,
+            name: feedName,
+            country: country,
+            includedKeywords: requiredKeywords,
+            excludedKeywords: excludedKeywords,
+            optionalKeywords: optionalKeywords,
+            language: language,
+            sources: sources,
+            topic: topic
         }
+        console.group('Telling parent...')
+        console.log(newFeed)
+        console.groupEnd()
+        onFeedChanged(newFeed)
+    }, [requiredKeywords, optionalKeywords, excludedKeywords, sources, topic, country, language, feedName])
 
-        getSources()
-    }, [selectedFeed]);
+    const getValues = (options?: Selected[]) => options ? options.map(o => o.value) : [];
+    const getSelected = (options?: string[]) => options ? options.map(o => {return {label: o, value: o}}) : []
 
-    const updateFeed = (feed: NewsFeed) => dispatch({type: 'update', payload: { feed: feed }})
+    const sourcesToSelects = (sources: NewsSource[]) => sources.map(s => { return {label: s.name, value: s.id} }) 
+    const selectStyleAttrs = {
+        components: { 
+            DropdownIndicator:() => null, 
+            IndicatorSeparator:() => null
+        }
+    }
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        console.log(e.target.value)
+        setFeedname(e.target.value)
+    }
 
+    // Use a ref on the name input to keep things sane because APPARENTLY shit don't work
     return (
         <Editor>
             <Header>
-                <h3>Feed Name</h3>
+                <NameInput ref={nameRef} value={feed.name} onChange={handleNameChange}/>
+                <TextButton onClick={(e) => {e.preventDefault(); window.alert('delete feed')}}>{`🗑  Delete Feed`}</TextButton>
             </Header>
-            <EditorPanels>
-                <Sidebar>
-                    {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => {console.log(i); setSelected(i)}}>{f.name}</Cell>)}
-                </Sidebar>
-                <EditorWrapper>
-                    { feeds.length > 0 ? <FeedEditorForm sourceOptions={sources} countryOptions={SourceCountryOptions.slice()} topicOptions={CategoryOptions.slice()} languageOptions={LanguageOptions.slice()} feed={feeds[selectedFeed]} onFeedChanged={updateFeed}/> : 'You have no Feeds! Create a new one 🌞'}
-                </EditorWrapper>
-            </EditorPanels>
+            <EditorSection title={CopyProvider.EDITOR_KEYWORDS_SECTION_TITLE} body={CopyProvider.EDITOR_KEYWORDS_SECTION_BODY}>
+                <EditorInput>
+                    <h4>Required</h4>
+                    <CreatableSelect {...selectStyleAttrs} value={getSelected(feed.includedKeywords)} isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
+                </EditorInput>
+                
+                <EditorInput>
+                    <h4>Optional</h4>
+                    <CreatableSelect {...selectStyleAttrs} value={getSelected(feed.optionalKeywords)} isMulti onChange={(s) => setOptional(getValues(s as Selected[]))}/>
+                </EditorInput>
+
+                <EditorInput>
+                    <h4>Excluded</h4>
+                    <CreatableSelect {...selectStyleAttrs} value={getSelected(feed.excludedKeywords)} isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
+                </EditorInput>
+            </EditorSection>
+            <EditorSection title={CopyProvider.EDITOR_CONTENT_SECTION_TITLE} body={CopyProvider.EDITOR_CONTENT_SECTION_BODY}>
+                <EditorInput>
+                    <h4>Sources</h4>
+                    <Select isMulti options={sourcesToSelects(sourceOptions)} value={sourcesToSelects(sources)} onChange={(s) => setSources((s as Selected[]).map(select => { return {name: select.label, id: select.value} }))}/>
+                </EditorInput>
+
+                <EditorInput>
+                    <h4>Topic</h4>
+                    <Select options={getSelected(topicOptions)} onChange={(s) => setTopic((s as Selected).value)}/>
+                </EditorInput>
+            </EditorSection>
+            <EditorSection title={CopyProvider.EDITOR_LOCALE_SECTION_TITLE} body={CopyProvider.EDITOR_LOCALE_SECTION_BODY}>
+                <EditorInput>
+                    <h4>Country</h4>
+                    <Select options={getSelected(countryOptions)} value={{label: feed.country, value: feed.country}} onChange={(s) => setCountry((s as Selected).value)}/>
+                </EditorInput>
+
+                <EditorInput>
+                    <h4>Language</h4>
+                    <Select  options={getSelected(languageOptions)} value={{label: feed.language, value: feed.language}} onChange={(s) => setLanguage((s as Selected).value)}/>
+                </EditorInput>
+            </EditorSection>
         </Editor>
     )
 }
