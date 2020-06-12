@@ -26,17 +26,58 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
 
     const nameRef = React.useRef<HTMLInputElement>(null);
 
-    const [requiredKeywords, setRequired] = React.useState<string[]>(feed.includedKeywords);
-    const [optionalKeywords, setOptional] = React.useState<string[]>(feed.optionalKeywords);
-    const [excludedKeywords, setExcluded] = React.useState<string[]>(feed.excludedKeywords);
+    const setRequired = (keywords: string[]) => {
+        updateFeed({
+            ...feed,
+            includedKeywords: keywords
+        })
+    }
+    const setOptional = (keywords: string[]) => {
+        updateFeed({
+            ...feed,
+            optionalKeywords: keywords
+        })
+    }
+    const setExcluded = (keywords: string[]) => {
+        updateFeed({
+            ...feed,
+            excludedKeywords: keywords
+        })
+    }
+    const setSources = (sources: NewsSource[]) => {
+        updateFeed({
+            ...feed,
+            sources: sources
+        })
+    }
+    const setTopic = (topic: string) => {
+        updateFeed({
+            ...feed,
+            topic: topic
+        })
+    }
+    const setCountry = (country: string) => {
+        updateFeed({
+            ...feed,
+            country: country
+        })
+    }
+    const setLanguage = (language: string) => {
+        updateFeed({
+            ...feed,
+            language: language
+        })
+    }
+    const setFeedname = (name: string) => {
+        updateFeed({
+            ...feed,
+            name: name
+        })
+    }
 
-    const [sources, setSources] = React.useState<NewsSource[]>(feed.sources);
-    const [topic, setTopic] = React.useState<string>('');
-
-    const [country, setCountry] = React.useState<string>(feed.country);
-    const [language, setLanguage] = React.useState<string>(feed.language);
-    
-    const [feedName, setFeedname] = React.useState<string>(feed.name);
+    const updateFeed = (feed: NewsFeed) => {
+        onFeedChanged(feed)
+    }
 
     React.useEffect(() => {
         console.group('Received...')
@@ -44,24 +85,6 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
         console.groupEnd()
         if (nameRef.current) nameRef.current.value = feed.name;
     })
-
-    React.useEffect(() => {
-        let newFeed = { 
-            id: feed.id,
-            name: feedName,
-            country: country,
-            includedKeywords: requiredKeywords,
-            excludedKeywords: excludedKeywords,
-            optionalKeywords: optionalKeywords,
-            language: language,
-            sources: sources,
-            topic: topic
-        }
-        console.group('Telling parent...')
-        console.log(newFeed)
-        console.groupEnd()
-        onFeedChanged(newFeed)
-    }, [requiredKeywords, optionalKeywords, excludedKeywords, sources, topic, country, language, feedName])
 
     const getValues = (options?: Selected[]) => options ? options.map(o => o.value) : [];
     const getSelected = (options?: string[]) => options ? options.map(o => {return {label: o, value: o}}) : []
@@ -105,7 +128,7 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             <EditorSection title={CopyProvider.EDITOR_CONTENT_SECTION_TITLE} body={CopyProvider.EDITOR_CONTENT_SECTION_BODY}>
                 <EditorInput>
                     <h4>Sources</h4>
-                    <Select isMulti options={sourcesToSelects(sourceOptions)} value={sourcesToSelects(sources)} onChange={(s) => setSources((s as Selected[]).map(select => { return {name: select.label, id: select.value} }))}/>
+                    <Select isMulti options={sourcesToSelects(sourceOptions)} value={sourcesToSelects(feed.sources)} onChange={(s) => setSources((s as Selected[]).map(select => { return {name: select.label, id: select.value} }))}/>
                 </EditorInput>
 
                 <EditorInput>
