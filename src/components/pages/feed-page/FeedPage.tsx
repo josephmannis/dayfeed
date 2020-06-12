@@ -1,6 +1,7 @@
 import React from 'react';
 import { Page, Content, Header, Title } from '../../templates/page';
 import FeedEditor from '../../organisms/feed-editor/FeedEditor';
+import { FeedProvider } from '../../../state/feedContext';
 
 
 interface IFeedPageProps {
@@ -14,7 +15,9 @@ const FeedPage: React.FC<IFeedPageProps> = props => {
                 <Header>
                     <Title>manage feeds</Title>
                 </Header>
-                <FeedEditor/>
+                <FeedProvider>
+                    <FeedEditor/>
+                </FeedProvider>
             </Content>
         </Page>
     )

@@ -22,10 +22,11 @@ export default function getNewsService(): INewsService {
 
 function getSources(category?: Category, language?: Language, country?: SourceCountry): Promise<Source[]> {
     let url = getBaseUrl('sources');
-
+    url = `${url}${category ? `&category=${category}` : ''}${language ? `&language=${language}` : ''}${country ? `&country=${country}` : ''}`
+    console.log(url)
     return fetch(url)
         .then(res => res.json())
-        .then(sources => sources)
+        .then(res => res.sources)
         .catch(error => error)
 }
 

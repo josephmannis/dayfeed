@@ -19,6 +19,11 @@ export type NewsFeed = {
     excludedKeywords: string[];
     optionalKeywords: string[];
     language: string;
-    sources: string[];
+    sources: NewsSource[];
+    topic: string;
 }
 
+export type NewsSource = {
+    id: string;
+    name: string;
+}
