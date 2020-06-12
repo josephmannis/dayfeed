@@ -14,6 +14,7 @@ interface IFeedEditorFormProps {
     languageOptions: string[];
     topicOptions: string[];
     onFeedChanged: (feed: NewsFeed) => void;
+    onFeedDeleted: (feed: NewsFeed) => void;
 }
 
 type Selected = {
@@ -22,9 +23,7 @@ type Selected = {
 }
 
 const FeedEditor: React.FC<IFeedEditorFormProps> = props => {    
-    const {feed, sourceOptions, countryOptions, languageOptions, topicOptions, onFeedChanged} = props;
-
-    const nameRef = React.useRef<HTMLInputElement>(null);
+    const {feed, onFeedDeleted, sourceOptions, countryOptions, languageOptions, topicOptions, onFeedChanged} = props;
 
     const setRequired = (keywords: string[]) => {
         updateFeed({
@@ -76,15 +75,9 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
     }
 
     const updateFeed = (feed: NewsFeed) => {
-        onFeedChanged(feed)
-    }
+        console.log("???")
 
-    React.useEffect(() => {
-        console.group('Received...')
-        console.log(feed)
-        console.groupEnd()
-        if (nameRef.current) nameRef.current.value = feed.name;
-    })
+        onFeedChanged(feed)}
 
     const getValues = (options?: Selected[]) => options ? options.map(o => o.value) : [];
     const getSelected = (options?: string[]) => options ? options.map(o => {return {label: o, value: o}}) : []
@@ -96,18 +89,12 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             IndicatorSeparator:() => null
         }
     }
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        console.log(e.target.value)
-        setFeedname(e.target.value)
-    }
 
-    // Use a ref on the name input to keep things sane because APPARENTLY shit don't work
     return (
         <Editor>
             <Header>
-                <NameInput ref={nameRef} value={feed.name} onChange={handleNameChange}/>
-                <TextButton onClick={(e) => {e.preventDefault(); window.alert('delete feed')}}>{`🗑  Delete Feed`}</TextButton>
+                <NameInput value={feed.name} onChange={(e) => setFeedname(e.target.value)}/>
+                <TextButton onClick={() => onFeedDeleted(feed)}>{`🗑  Delete Feed`}</TextButton>
             </Header>
             <EditorSection title={CopyProvider.EDITOR_KEYWORDS_SECTION_TITLE} body={CopyProvider.EDITOR_KEYWORDS_SECTION_BODY}>
                 <EditorInput>
