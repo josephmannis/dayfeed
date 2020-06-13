@@ -1,7 +1,8 @@
 import React from 'react';
 import NewsFeed from '../../../connector/organisms/news-feed/NewsFeed';
-import { Page, Content, Header, Title } from './styled';
 import { Button } from '../../atoms/button/Button';
+import { Page, Header, Content, Title } from '../../templates/page';
+import { Link } from 'react-router-dom';
 
 
 const HomePage: React.FC = () => {
@@ -10,7 +11,9 @@ const HomePage: React.FC = () => {
             <Content>
                 <Header>
                     <Title>☼ dayfeed</Title>
-                    <Button onClick={() => window.alert('make feeeeeeeeeed')}>+ New Feed</Button>
+                    <Link to='/manage'>
+                        <Button>✎ Manage Feeds</Button>
+                    </Link>
                 </Header>
                 <NewsFeed/>
             </Content>
