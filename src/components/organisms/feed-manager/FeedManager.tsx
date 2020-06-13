@@ -1,11 +1,11 @@
 import React from 'react';
-import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper } from './styled';
+import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper, NewFeedButton } from './styled';
 import { NewsFeed, NewsSource } from '../../../lib/client/types';
 import FeedEditor from '../feed-editor/FeedEditor';
 import { SourceCountryOptions, LanguageOptions, CategoryOptions, Category, Language, SourceCountry } from '../../../lib/api/types';
-import getNewsService from '../../../service/news';
+import getNewsService from '../../../api/news';
 import { useFeedState, useFeedDispatch } from '../../../state/feedContext';
-import { TextButton } from '../../atoms/button/Button';
+import { v4 } from 'uuid';
 
 
 const FeedManager: React.FC = props => {
@@ -14,29 +14,29 @@ const FeedManager: React.FC = props => {
     const { feeds } = useFeedState();
     const dispatch = useFeedDispatch();
     
-    // React.useEffect(() => {
-    //     async function getSources() {
-    //         // let feed = feeds[selectedFeed];
-    //         // let service = getNewsService();
-    //         // service.getSources(feed.topic as Category, feed.language as Language, feed.country as SourceCountry)
-    //         // .then(res => {
-    //         //     let sources: NewsSource[] = []
-    //         //     console.log(res)
-    //         //     res.forEach(s => { if (s.id && s.name) sources.push({name: s.name, id: s.id}) })
-    //         //     setSources(sources);
-    //         // })
-    //     }
+    React.useEffect(() => {
+        async function getSources() {
+            let feed = feeds[selectedFeed];
+            let service = getNewsService();
+            service.getSources(
+                feed ? feed.topic as Category : undefined,
+                feed ? feed.language as Language : undefined,
+                feed ? feed.country as SourceCountry : undefined)
+            .then(res => {
+                let sources: NewsSource[] = []
+                res.forEach(s => { if (s.id && s.name) sources.push({name: s.name, id: s.id}) })
+                setSources(sources);
+            })
+        }
 
-    //     getSources()
-    // }, [selectedFeed]);
+        getSources()
+    }, [selectedFeed, feeds]);
 
-    const updateFeed = (feed: NewsFeed) => {
-        console.log("???")
-        dispatch({type: 'update', payload: {feed: feed}})}
+    const updateFeed = (feed: NewsFeed) => dispatch({type: 'update', payload: {feed: feed}})
 
     const onFeedAdded = () => {
         let newFeed: NewsFeed = {
-            id: 'hi',
+            id: v4(),
             name: 'New Feed',
             country: 'us',
             language: 'en',
@@ -46,9 +46,6 @@ const FeedManager: React.FC = props => {
             topic: 'general',   
             sources: []
         }
-        console.log("???")
-
-
         dispatch({type: 'add', payload: {feed: newFeed}})
     }
 
@@ -57,12 +54,12 @@ const FeedManager: React.FC = props => {
     return (
         <Editor>
             <Header>
-                <h3>Feed Name</h3>
+                <h3>Feeds</h3>
             </Header>
             <EditorPanels>
                 <Sidebar>
                     {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => {console.log(i); setSelected(i)}}>{f.name}</Cell>)}
-                    <TextButton onClick={onFeedAdded}>+ New Feed</TextButton>
+                    <NewFeedButton onClick={onFeedAdded}>+ New Feed</NewFeedButton>
                 </Sidebar>
                 <EditorWrapper>
                     { feeds.length > 0 ? 

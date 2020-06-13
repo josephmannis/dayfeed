@@ -52,18 +52,21 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
     const setTopic = (topic: string) => {
         updateFeed({
             ...feed,
+            sources: [],
             topic: topic
         })
     }
     const setCountry = (country: string) => {
         updateFeed({
             ...feed,
+            sources: [],
             country: country
         })
     }
     const setLanguage = (language: string) => {
         updateFeed({
             ...feed,
+            sources: [],
             language: language
         })
     }
@@ -74,13 +77,11 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
         })
     }
 
-    const updateFeed = (feed: NewsFeed) => {
-        console.log("???")
-
-        onFeedChanged(feed)}
+    const updateFeed = (feed: NewsFeed) => onFeedChanged(feed)
 
     const getValues = (options?: Selected[]) => options ? options.map(o => o.value) : [];
     const getSelected = (options?: string[]) => options ? options.map(o => {return {label: o, value: o}}) : []
+    const toSelected = (option: string) => { return { label: option, value: option } }
 
     const sourcesToSelects = (sources: NewsSource[]) => sources.map(s => { return {label: s.name, value: s.id} }) 
     const selectStyleAttrs = {
@@ -120,18 +121,18 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
 
                 <EditorInput>
                     <h4>Topic</h4>
-                    <Select options={getSelected(topicOptions)} onChange={(s) => setTopic((s as Selected).value)}/>
+                    <Select options={getSelected(topicOptions)} value={toSelected(feed.topic)} onChange={(s) => setTopic((s as Selected).value)}/>
                 </EditorInput>
             </EditorSection>
             <EditorSection title={CopyProvider.EDITOR_LOCALE_SECTION_TITLE} body={CopyProvider.EDITOR_LOCALE_SECTION_BODY}>
                 <EditorInput>
                     <h4>Country</h4>
-                    <Select options={getSelected(countryOptions)} value={{label: feed.country, value: feed.country}} onChange={(s) => setCountry((s as Selected).value)}/>
+                    <Select options={getSelected(countryOptions)} value={toSelected(feed.country)} onChange={(s) => setCountry((s as Selected).value)}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Language</h4>
-                    <Select  options={getSelected(languageOptions)} value={{label: feed.language, value: feed.language}} onChange={(s) => setLanguage((s as Selected).value)}/>
+                    <Select  options={getSelected(languageOptions)} value={toSelected(feed.language)} onChange={(s) => setLanguage((s as Selected).value)}/>
                 </EditorInput>
             </EditorSection>
         </Editor>

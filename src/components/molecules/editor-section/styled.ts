@@ -10,6 +10,7 @@ export const EditorSectionHeader = styled.h4`
 
 export const SectionBody = styled.p`
     color: ${colors.textLight};
+    white-space: pre-wrap;
 `
 
 export const SectionInputs = styled.div.attrs({className: 'flex flex-nowrap'})`

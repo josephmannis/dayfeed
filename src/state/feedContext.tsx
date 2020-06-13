@@ -43,34 +43,9 @@ function feedReducer(state: State, action: Action) {
     }
 }
 
-const fake: NewsFeed = {
-    id: 'fakefeed1',
-    name: 'Top Headlines',
-    country: 'us',
-    excludedKeywords: ['sad'],
-    includedKeywords: ['happy'],
-    optionalKeywords: ['indifferent'],
-    language: 'en',
-    sources: [{id: 'abc-news-en', name: 'ABC News (EN)'}],
-    topic: 'general'
-}
-
-const fake2: NewsFeed = {
-    id: 'fakefeed2',
-    name: 'Cybersecurity',
-    country: 'us',
-    excludedKeywords: ['insecure'],
-    includedKeywords: ['secure'],
-    optionalKeywords: ['super'],
-    language: 'en',
-    sources: [{id: 'abc-news-en', name: 'ABC News (EN)'}],
-    topic: 'business'
-}
-
-
 function FeedProvider({children}: FeedProviderProps) {
     // This persists the state to local storage
-    const [state, dispatch] = useStorageReducer(localStorage, 'FEED_LIST', feedReducer, { feeds: [fake, fake2] });
+    const [state, dispatch] = useStorageReducer(localStorage, 'FEED_LIST', feedReducer, { feeds: [] });
     
     return (
         <FeedContext.Provider value={state}>

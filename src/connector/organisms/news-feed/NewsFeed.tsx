@@ -1,5 +1,5 @@
 import React from 'react';
-import getNewsService from '../../../service/news';
+import getNewsService from '../../../api/news';
 import { NewsQuery } from '../../../lib/api/types';
 import { NewsArticle } from '../../../lib/client/types';
 import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFeed';
