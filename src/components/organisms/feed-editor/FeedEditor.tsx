@@ -5,6 +5,7 @@ import { TextButton } from '../../atoms/button/Button';
 import EditorSection from '../../molecules/editor-section/EditorSection';
 import { CopyProvider } from '../../../strings/strings';
 import CreatableSelect from 'react-select/creatable';
+import makeAnimated from 'react-select/animated';
 import Select from 'react-select';
 
 interface IFeedEditorFormProps {
@@ -49,27 +50,9 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             sources: sources
         })
     }
-    const setTopic = (topic: string) => {
-        updateFeed({
-            ...feed,
-            sources: [],
-            topic: topic
-        })
-    }
-    const setCountry = (country: string) => {
-        updateFeed({
-            ...feed,
-            sources: [],
-            country: country
-        })
-    }
-    const setLanguage = (language: string) => {
-        updateFeed({
-            ...feed,
-            sources: [],
-            language: language
-        })
-    }
+    const setTopic = (topic: Selected | null) => updateAndResetSources('topic', topic)
+    const setCountry = (country: Selected | null) => updateAndResetSources('country', country)
+    const setLanguage = (language: Selected | null) => updateAndResetSources('language', language)
     const setFeedname = (name: string) => {
         updateFeed({
             ...feed,
@@ -77,17 +60,31 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
         })
     }
 
+    const updateAndResetSources = <T extends keyof Pick<NewsFeed, 'country' | 'topic' | 'language'>>(feedField: T, selectItem: Selected | null) => {
+        let value = selectItem ? selectItem.value : undefined
+        let updated = {
+            ...feed,
+            sources: value !== feed[feedField] ? [] : feed.sources
+        }
+
+        updated[feedField] = value
+
+        updateFeed(updated)
+    }
+
     const updateFeed = (feed: NewsFeed) => onFeedChanged(feed)
 
     const getValues = (options?: Selected[]) => options ? options.map(o => o.value) : [];
     const getSelected = (options?: string[]) => options ? options.map(o => {return {label: o, value: o}}) : []
-    const toSelected = (option: string) => { return { label: option, value: option } }
+    const toSelected = (option?: string) => { return { label: option, value: option } }
+    const animatedComponents = makeAnimated();
 
     const sourcesToSelects = (sources: NewsSource[]) => sources.map(s => { return {label: s.name, value: s.id} }) 
     const selectStyleAttrs = {
         components: { 
             DropdownIndicator:() => null, 
-            IndicatorSeparator:() => null
+            IndicatorSeparator:() => null,
+            ...makeAnimated()
         }
     }
 
@@ -116,23 +113,23 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             <EditorSection title={CopyProvider.EDITOR_CONTENT_SECTION_TITLE} body={CopyProvider.EDITOR_CONTENT_SECTION_BODY}>
                 <EditorInput>
                     <h4>Sources</h4>
-                    <Select isMulti options={sourcesToSelects(sourceOptions)} value={sourcesToSelects(feed.sources)} onChange={(s) => setSources((s as Selected[]).map(select => { return {name: select.label, id: select.value} }))}/>
+                    <Select isMulti components={animatedComponents} options={sourcesToSelects(sourceOptions)} value={sourcesToSelects(feed.sources)} onChange={(s) => setSources((s as Selected[]) ? (s as Selected[]).map(select => { return {name: select.label, id: select.value} }) : [])}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Topic</h4>
-                    <Select options={getSelected(topicOptions)} value={toSelected(feed.topic)} onChange={(s) => setTopic((s as Selected).value)}/>
+                    <Select isClearable options={getSelected(topicOptions)} value={toSelected(feed.topic)} onChange={(s) => setTopic((s as Selected))}/>
                 </EditorInput>
             </EditorSection>
-            <EditorSection title={CopyProvider.EDITOR_LOCALE_SECTION_TITLE} body={CopyProvider.EDITOR_LOCALE_SECTION_BODY}>
+            <EditorSection title={CopyProvider.EDITOR_LOCALE_SECTION_TITLE} body={CopyProvider.EDITOR_LOCALE_SECTION_BODY}> 
                 <EditorInput>
                     <h4>Country</h4>
-                    <Select options={getSelected(countryOptions)} value={toSelected(feed.country)} onChange={(s) => setCountry((s as Selected).value)}/>
+                    <Select isClearable options={getSelected(countryOptions)} value={toSelected(feed.country)} onChange={(s) => setCountry((s as Selected))}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Language</h4>
-                    <Select  options={getSelected(languageOptions)} value={toSelected(feed.language)} onChange={(s) => setLanguage((s as Selected).value)}/>
+                    <Select isClearable options={getSelected(languageOptions)} value={toSelected(feed.language)} onChange={(s) => setLanguage((s as Selected))}/>
                 </EditorInput>
             </EditorSection>
         </Editor>

@@ -38,12 +38,9 @@ const FeedManager: React.FC = props => {
         let newFeed: NewsFeed = {
             id: v4(),
             name: 'New Feed',
-            country: 'us',
-            language: 'en',
             includedKeywords: [],
             optionalKeywords: [],
             excludedKeywords: [],
-            topic: 'general',   
             sources: []
         }
         dispatch({type: 'add', payload: {feed: newFeed}})

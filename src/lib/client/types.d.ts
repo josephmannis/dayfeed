@@ -14,13 +14,13 @@ export type Tag = {
 export type NewsFeed = {
     id: string;
     name: string;
-    country: string;
+    country?: string;
     includedKeywords: string[];
     excludedKeywords: string[];
     optionalKeywords: string[];
-    language: string;
+    language?: string;
     sources: NewsSource[];
-    topic: string;
+    topic?: string;
 }
 
 export type NewsSource = {
