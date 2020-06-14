@@ -8,6 +8,7 @@ export type NewsQuery = {
 
 export type HeadlineQuery = NewsQuery & {
     country?: HeadlineCountry;
+    sources: string[];
 }
 
 export type ArticleResponse = {

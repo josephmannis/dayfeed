@@ -1,7 +1,6 @@
 import React from 'react';
 import { Page, Content, Header, Title } from '../../templates/page';
 import FeedManager from '../../organisms/feed-manager/FeedManager';
-import { FeedProvider } from '../../../state/feedContext';
 import { Link } from 'react-router-dom';
 
 

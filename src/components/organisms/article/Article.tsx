@@ -1,6 +1,7 @@
 import React from 'react';
 import { NewsArticle } from '../../../lib/client/types';
 import { Content, Wrapper, Title, Source, ArticleSnippet, ArticleImage } from './styled';
+import { url } from 'inspector';
 
 
 interface IArticleProps {
@@ -9,12 +10,11 @@ interface IArticleProps {
 
 const Article: React.FC<IArticleProps> = props => {
     const { title, id, description, imageUrl, articleUrl, sourceName } = props.article;
-    let articleTitle = title.substring(0,  title.lastIndexOf('-'))
     return (
         <Wrapper>
             <ArticleImage src={imageUrl}/>
             <Content>
-                <Title><a href={articleUrl} target='_blank'>{articleTitle}</a></Title>
+                <Title><a href={articleUrl} target='_blank' rel="noopener noreferrer">{title}</a></Title>
                 <ArticleSnippet>
                     <Source>{sourceName} — </Source> 
                     {description}
