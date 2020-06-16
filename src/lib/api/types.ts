@@ -8,6 +8,7 @@ export type NewsQuery = {
 
 export type HeadlineQuery = NewsQuery & {
     country?: HeadlineCountry;
+    sources: string[];
 }
 
 export type ArticleResponse = {
@@ -56,3 +57,8 @@ export type Status = 'ok' | 'error';
 
 export const SortOrderOptions = ['relevancy', 'popularity', 'publishedAt', 'relevancy'] as const;
 export type SortOrder = typeof SortOrderOptions[number];
+
+export type CachedRequest = {
+    response: string;
+    expiry: number; // milliseconds
+}

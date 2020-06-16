@@ -8,9 +8,10 @@ interface IDisconnectedNewsFeedProps {
 }
 
 const DisconnectedNewsFeed: React.FC<IDisconnectedNewsFeedProps> = props => {
+    const { articles } = props;
     return (
         <div className='flex flex-column w100'>
-            {props.articles.map((a,i) => <Article article={a} key={i}/>)}
+            { articles.length > 0 ? articles.map((a,i) => <Article article={a} key={i}/>) : 'No results.'}
         </div>
     )
 }

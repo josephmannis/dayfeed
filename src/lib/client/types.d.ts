@@ -27,3 +27,8 @@ export type NewsSource = {
     id: string;
     name: string;
 }
+
+export type Selected = {
+    label: string;
+    value: string;
+}

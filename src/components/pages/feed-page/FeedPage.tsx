@@ -1,8 +1,8 @@
 import React from 'react';
-import { Page, Content, Header, Title } from '../../templates/page';
+import { Page, Content, Header, Title, NavGroup } from '../../templates/page';
 import FeedManager from '../../organisms/feed-manager/FeedManager';
-import { FeedProvider } from '../../../state/feedContext';
 import { Link } from 'react-router-dom';
+import { BackArrowIcon } from '../../atoms/icon/BackArrow';
 
 
 interface IFeedPageProps {
@@ -14,7 +14,9 @@ const FeedPage: React.FC<IFeedPageProps> = props => {
         <Page>
             <Content>
                 <Header>
-                    <Link to={'/'}>Back to home</Link> <Title>manage feeds</Title>
+                    <NavGroup>
+                        <Link to={'/'}><BackArrowIcon/></Link> <Title>manage feeds</Title>
+                    </NavGroup>
                 </Header>
                 <FeedManager/>
             </Content>

@@ -1,31 +1,42 @@
 import React from 'react';
 import getNewsService from '../../../api/news';
-import { NewsQuery } from '../../../lib/api/types';
+import { NewsQuery, Category, Language, HeadlineQuery, HeadlineCountry } from '../../../lib/api/types';
 import { NewsArticle } from '../../../lib/client/types';
 import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFeed';
+import { useFeedState } from '../../../state/feedContext';
+import Select from 'react-select';
 
 
 const NewsFeed: React.FC = () => {
     const [articles, setArticles] = React.useState<NewsArticle[]>([])
     const [error, setError] = React.useState<string | undefined>(undefined);
+    const { feeds } = useFeedState();
+    const [selectedFeed, setSelected] = React.useState(0);
 
     React.useEffect(() => {
         async function fetchFeed() { 
             let newsSerivce = getNewsService();
-            let query: NewsQuery = {
-                requiredKeywords: [],
-                optionalKeywords: [],
-                excludedKeywords: []
+            let feed = feeds[selectedFeed];
+            if (!feed) return;
+
+            let query: HeadlineQuery = {
+                requiredKeywords: feed.includedKeywords,
+                optionalKeywords: feed.optionalKeywords,
+                excludedKeywords: feed.excludedKeywords,
+                category: feed.topic ? feed.topic as Category : undefined,
+                language: feed.language ? feed.language as Language : undefined,
+                country: feed.country ? feed.country as HeadlineCountry : undefined,
+                sources: feed.sources.map(s => s.id)
             }
             newsSerivce.searchTopHeadlines(query, 30, 1)
             .then(res => setArticles(
                 res.articles.map(a => {
-                    console.log(a)
+                    console.log(a.urlToImage)
                     return {
                         title: a.title ? a.title : 'Failed to load title',
                         id: a.url ? a.url : '',
-                        description: a.description ? a.description : 'Failed to load description.',
-                        imageUrl: a.urlToImage ? a.urlToImage : 'https://via.placeholder.com/166',
+                        description: a.description ? a.description : 'No description provided.',
+                        imageUrl: a.urlToImage && a.urlToImage !== 'null' ? a.urlToImage : 'https://k12cit.com/assets/images/missing.png',
                         articleUrl: a.url ? a.url : '',
                         sourceName: a.source?.name ? a.source?.name : 'Unknown source'
                     }
@@ -34,7 +45,7 @@ const NewsFeed: React.FC = () => {
         }
 
         fetchFeed()
-    }, [])
+    }, [selectedFeed])
 
     if (error) {
         return (
@@ -44,7 +55,18 @@ const NewsFeed: React.FC = () => {
         )
     }
 
-    return (<DisconnectedNewsFeed articles={articles}/>)
+    return (
+        <>
+            {
+                feeds.length !== 0 && 
+                <Select value={{label: feeds[selectedFeed].name, value: selectedFeed}}
+                        options={feeds.map((f, i) => {return {label: f.name, value: i}})}
+                        onChange={(s) => setSelected((s as {label: string, value: number}).value)}
+                />
+            }
+            <DisconnectedNewsFeed articles={articles}/>
+        </>
+    )
 }
 
 export default NewsFeed;

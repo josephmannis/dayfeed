@@ -1,5 +1,5 @@
 import React from 'react';
-import { NewsFeed, NewsSource } from '../../../lib/client/types';
+import { NewsFeed, NewsSource, Selected } from '../../../lib/client/types';
 import { Editor, Header, EditorInput, NameInput } from './styled';
 import { TextButton } from '../../atoms/button/Button';
 import EditorSection from '../../molecules/editor-section/EditorSection';
@@ -16,11 +16,6 @@ interface IFeedEditorFormProps {
     topicOptions: string[];
     onFeedChanged: (feed: NewsFeed) => void;
     onFeedDeleted: (feed: NewsFeed) => void;
-}
-
-type Selected = {
-    label: string;
-    value: string;
 }
 
 const FeedEditor: React.FC<IFeedEditorFormProps> = props => {    
