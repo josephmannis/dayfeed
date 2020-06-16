@@ -18,7 +18,7 @@ interface IFeedEditorFormProps {
     onFeedDeleted: (feed: NewsFeed) => void;
 }
 
-type Selected = {
+export type Selected = {
     label: string;
     value: string;
 }

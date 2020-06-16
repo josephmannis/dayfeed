@@ -5,6 +5,7 @@ import { NewsArticle } from '../../../lib/client/types';
 import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFeed';
 import { useFeedState } from '../../../state/feedContext';
 import Select from 'react-select';
+import { Selected } from '../../../components/organisms/feed-editor/FeedEditor';
 
 
 const NewsFeed: React.FC = () => {
@@ -45,7 +46,7 @@ const NewsFeed: React.FC = () => {
         }
 
         fetchFeed()
-    }, [])
+    }, [selectedFeed])
 
     if (error) {
         return (
@@ -57,7 +58,13 @@ const NewsFeed: React.FC = () => {
 
     return (
         <>
-            {feeds.length !== 0 && <Select value={{label: feeds[selectedFeed].name, value: selectedFeed}} options={feeds.map((f, i) => {return {label: f.name, value: i}})}/>}
+            {
+                feeds.length !== 0 && 
+                <Select value={{label: feeds[selectedFeed].name, value: selectedFeed}}
+                        options={feeds.map((f, i) => {return {label: f.name, value: i}})}
+                        onChange={(s) => setSelected((s as {label: string, value: number}).value)}
+                />
+            }
             <DisconnectedNewsFeed articles={articles}/>
         </>
     )
