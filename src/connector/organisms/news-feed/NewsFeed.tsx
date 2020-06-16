@@ -5,7 +5,6 @@ import { NewsArticle } from '../../../lib/client/types';
 import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFeed';
 import { useFeedState } from '../../../state/feedContext';
 import Select from 'react-select';
-import { Selected } from '../../../components/organisms/feed-editor/FeedEditor';
 
 
 const NewsFeed: React.FC = () => {

@@ -15,8 +15,10 @@ export const Content = styled.div.attrs({className: 'flex flex-column'})`
     }
 `
 
-export const Title = styled.h1`
+export const Title = styled.h1.attrs({className: 'ml3'})`
     font-size: 2.45em;
 `
 
 export const Header = styled.div.attrs({className: 'flex justify-between mb5 mt4 items-center'})``
+
+export const NavGroup = styled.div.attrs({className: 'flex items-center'})``
