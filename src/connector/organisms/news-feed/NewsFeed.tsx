@@ -1,6 +1,6 @@
 import React from 'react';
 import getNewsService from '../../../api/news';
-import { NewsQuery, Category, Language, HeadlineQuery, HeadlineCountry } from '../../../lib/api/types';
+import { Category, Language, HeadlineQuery, HeadlineCountry } from '../../../lib/api/types';
 import { NewsArticle } from '../../../lib/client/types';
 import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFeed';
 import { useFeedState } from '../../../state/feedContext';
@@ -45,7 +45,7 @@ const NewsFeed: React.FC = () => {
         }
 
         fetchFeed()
-    }, [selectedFeed])
+    }, [selectedFeed, feeds])
 
     if (error) {
         return (
