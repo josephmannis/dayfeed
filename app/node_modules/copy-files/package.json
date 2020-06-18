@@ -1,0 +1,39 @@
+{
+  "name": "copy-files",
+  "version": "0.1.0",
+  "description": "Streaming file copier",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scottcorgan/copy-files.git"
+  },
+  "keywords": [
+    "copy",
+    "stream",
+    "files",
+    "copies",
+    "mv",
+    "cp"
+  ],
+  "author": "Scott Corgan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scottcorgan/copy-files/issues"
+  },
+  "homepage": "https://github.com/scottcorgan/copy-files",
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "chai": "^1.9.1"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "lodash": "^2.4.1",
+    "mkdirp": "^0.5.0"
+  }
+}
