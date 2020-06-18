@@ -15,6 +15,7 @@
   "scripts": {
     "start": "npx ts-node index.ts",
     "build": "npx tsc && cd app && yarn build",
-    "postbuild": "mv app/build build/app"
+    "postbuild": "mv app/build build/app",
+    "preinstall": "cd app && yarn install"
   }
 }
