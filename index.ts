@@ -3,7 +3,7 @@ import * as path from "path";
 import {Request, Response} from "express";
 
 const app = express()
-const port = 8080
+const port = process.env.PORT || 5000
 
 app.use(express.static(path.resolve("./") + "/build/app"));
 
