@@ -6,7 +6,6 @@
   "repository": "git@github.com:Dirk94/express-react-app.git",
   "author": "Dirk Hoekstra <dirkhoekstra@gmail.com>",
   "license": "MIT",
-  "private": null,
   "dependencies": {
     "@types/express": "^4.17.2",
     "express": "^4.17.1",
@@ -14,7 +13,7 @@
     "typescript": "^3.7.4"
   },
   "scripts": {
-    "start": "npx ts-node server.ts",
+    "start": "npx ts-node index.ts",
     "build": "npx tsc && cd app && yarn build",
     "postbuild": "mv app/build build/app"
   }
