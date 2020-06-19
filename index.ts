@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { response } from 'express'
 import * as path from "path";
 import {Request, Response} from "express";
 import NewsAPI from 'newsapi';
@@ -16,18 +16,33 @@ app.get("/", (req: Request, res: Response): void => {
     res.sendFile(path.resolve("./") + "/build/app/index.html");
 });
 
-app.get("/headlines", (req: Request, res: Response): void => {
+const buildQuery = query => {
+    const { q, category, country, sources, language, sortBy, pageSize, page } = query;
 
+    return {
+        ...category && { category: category },
+        ...country  && { country: country },
+        ...language && { language: language },
+        ...sources  && { sources: sources },
+        ...pageSize && { pageSize: pageSize },
+        ...sortBy   && { sortBy: sortBy },
+        ...page     && { page: page },
+        ...q        && { q: q },
+    }
+}
+
+app.get("/everything", (req: Request, res: Response): void => {
+    api.v2.everything(buildQuery(req.query))
+    .then(response => res.send(response))
+})
+
+app.get("/top-headlines", (req: Request, res: Response): void => {
+    api.v2.topHeadlines(buildQuery(req.query))
+    .then(response => res.send(response))
 })
 
 app.get("/sources", (req: Request, res: Response): void => {
-    const {category, country, language} = req.query;
-
-    api.v2.sources({
-        ...category && { category: category },
-        ...country  && { country: country },
-        ...language && { language: language }
-    })
+    api.v2.sources(buildQuery(req.query))
     .then(response => res.send(response))
 })
 
