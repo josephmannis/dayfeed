@@ -1,14 +1,14 @@
 export type NewsQuery = {
-    category?: Category;
     language?: Language;
     requiredKeywords: string[];
     optionalKeywords: string[];
     excludedKeywords: string[];
+    sources: string[];
 }
 
 export type HeadlineQuery = NewsQuery & {
     country?: HeadlineCountry;
-    sources: string[];
+    category?: Category;
 }
 
 export type ArticleResponse = {

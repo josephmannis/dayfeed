@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { colors } from "../../../css/var/color";
 
 
-export const Wrapper = styled.article.attrs({className: 'flex justify-between pv4 bt b--light-gray'})``
+export const Wrapper = styled.article.attrs({className: 'flex justify-start pv4 bt b--light-gray'})``
 
 export const Content = styled.div.attrs({className: 'flex flex-column'})``
 

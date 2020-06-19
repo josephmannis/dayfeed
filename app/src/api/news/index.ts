@@ -2,7 +2,8 @@ import { Category, Language, SourceCountry, Source, SortOrder, NewsQuery, Headli
 
 type location = 'top-headlines' | 'everything' | 'sources';
 
-const getBaseUrl = (loc: location) => `https://newsapi.org/v2/${loc}?`
+const getBaseUrl = (loc: location) => `/${loc}?`
+
 const defualtHeadlineCountry: HeadlineCountry = 'us'
 const CACHE_TIME = 3.6e+6 // 1 hour
 
@@ -20,9 +21,29 @@ export default function getNewsService(): INewsService {
     }
 }
 
+function buildUrl(location: location, query: NewsQuery & HeadlineQuery, pageSize: number, page: number, sortOrder?: SortOrder): string {
+    const { language, sources, category, country} = query;
+    let url = 
+        `${language ? `&language=${language}` : ''}` +
+        `${sortOrder ? `&sortBy=${sortOrder}` : ''}` +
+        `${page ? `&page=${page}` : ''}` +
+        `${pageSize ? `&pageSize=${pageSize}` : ''}` +
+        `${getKeywordString(query)}`;
+
+    if (sources.length > 0) {
+        url = `${url}&sources=${sources.join(',')}`
+    } else {
+        url = `${url}${category ? `&category=${category}` : ''}&country=${country ? country : defualtHeadlineCountry}`
+    }
+
+    url = url.replace('&', '')
+    return `${getBaseUrl(location)}${url}`;
+}
+
 function getSources(category?: Category, language?: Language, country?: SourceCountry): Promise<Source[]> {
     let url = getBaseUrl('sources');
     url = `${url}${category ? `&category=${category}` : ''}${language ? `&language=${language}` : ''}${country ? `&country=${country}` : ''}`
+    
     return cachedFetch(url)
         .then(res => res.json())
         .then(res => res.sources)
@@ -30,27 +51,15 @@ function getSources(category?: Category, language?: Language, country?: SourceCo
 }
 
 function searchAllArticles(query: NewsQuery, pageSize: number, page: number, sortOrder?: SortOrder): Promise<ArticleResponse> {
-    let url = getBaseUrl('everything')
-    url = `${url}${getKeywordString(query)}`
-
-    return cachedFetch(url)
-    .then(res => res.json())
-    .then(articles => articles)
-    .catch(error => {console.log(error); throw error})
+    return getArticles('everything', query, pageSize, page, sortOrder);
 }
 
 function searchTopHeadlines(query: HeadlineQuery, pageSize: number, page: number): Promise<ArticleResponse> {
-    const {category, language, country, sources} = query;
-    let url = getBaseUrl('top-headlines')
-    if (sources.length > 0) {
-        url = `${url}&sources=${sources.join(',')}`
-    } else {
-        url = `${url}${category ? `&category=${category}` : ''}&country=${country ? country : defualtHeadlineCountry}`
-    }
-    url = `${url}${language ? `&language=${language}` : ''}`
-    url = `${url}${getKeywordString(query)}`
-    url = url.replace('&', '')
+    return getArticles('top-headlines', query, pageSize, page);
+}
 
+function getArticles(location: location, query: NewsQuery | HeadlineQuery, pageSize: number, page: number, sortOrder?: SortOrder): Promise<ArticleResponse> {
+    let url = buildUrl(location, query, pageSize, page, sortOrder);
     return cachedFetch(url)
     .then(res => res.json())
     .then(sources => sources)
