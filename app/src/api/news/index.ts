@@ -3,6 +3,8 @@ import { Category, Language, SourceCountry, Source, SortOrder, NewsQuery, Headli
 type location = 'top-headlines' | 'everything' | 'sources';
 
 const getBaseUrl = (loc: location) => `https://newsapi.org/v2/${loc}?`
+const getBaseLocalUrl = (loc: location) => `/${loc}?`
+
 const defualtHeadlineCountry: HeadlineCountry = 'us'
 const CACHE_TIME = 3.6e+6 // 1 hour
 
@@ -21,8 +23,9 @@ export default function getNewsService(): INewsService {
 }
 
 function getSources(category?: Category, language?: Language, country?: SourceCountry): Promise<Source[]> {
-    let url = getBaseUrl('sources');
+    let url = getBaseLocalUrl('sources');
     url = `${url}${category ? `&category=${category}` : ''}${language ? `&language=${language}` : ''}${country ? `&country=${country}` : ''}`
+    
     return cachedFetch(url)
         .then(res => res.json())
         .then(res => res.sources)
