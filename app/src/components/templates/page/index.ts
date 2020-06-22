@@ -7,7 +7,7 @@ export const Content = styled.div.attrs({className: 'flex flex-column'})`
     width: 40%;
     
     @media ${devices.laptopL} {
-        width: 50%;
+        width: 60%;
     }
 
     @media ${devices.tablet} {

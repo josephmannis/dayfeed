@@ -6,6 +6,8 @@ import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFe
 import { useFeedState } from '../../../state/feedContext';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { colors } from '../../../css/var/color';
+import { SelectTheme, FeedSelectStyle } from '../../../components/molecules/select/Select';
 
 
 const NewsFeed: React.FC = () => {
@@ -74,12 +76,8 @@ const NewsFeed: React.FC = () => {
             {
                 feeds.length !== 0 && 
                 <Select {...selectStyleAttrs}
-                        styles={{menu: (provided, state) => {
-                            return {
-                                ...provided,
-                                fontFamily: 'Libre Baskerville, serif'
-                            }
-                        }}}
+                        theme={theme => {console.log(theme); return SelectTheme(theme)}}
+                        styles={FeedSelectStyle}
                         value={{label: feeds[selectedFeed].name, value: selectedFeed}}
                         options={feeds.map((f, i) => {return {label: f.name, value: i}})}
                         onChange={(s) => setSelected((s as {label: string, value: number}).value)}

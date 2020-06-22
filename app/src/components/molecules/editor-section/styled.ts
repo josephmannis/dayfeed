@@ -13,7 +13,7 @@ export const SectionBody = styled.p`
     white-space: pre-wrap;
 `
 
-export const SectionInputs = styled.div.attrs({className: 'flex flex-nowrap'})`
+export const SectionInputs = styled.div.attrs({className: 'flex flex-nowrap-l flex-wrap'})`
   & > *:last-child {
     margin-right: 0;
   }

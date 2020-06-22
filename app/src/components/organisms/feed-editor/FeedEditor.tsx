@@ -7,6 +7,7 @@ import { CopyProvider } from '../../../strings/strings';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import Select from 'react-select';
+import { baseSelectAttrs } from '../../molecules/select/Select';
 
 interface IFeedEditorFormProps {
     feed: NewsFeed;
@@ -92,17 +93,17 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             <EditorSection title={CopyProvider.EDITOR_KEYWORDS_SECTION_TITLE} body={CopyProvider.EDITOR_KEYWORDS_SECTION_BODY}>
                 <EditorInput>
                     <h4>Required</h4>
-                    <CreatableSelect {...selectStyleAttrs} value={getSelected(feed.includedKeywords)} isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
+                    <CreatableSelect {...baseSelectAttrs} value={getSelected(feed.includedKeywords)} isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
                 </EditorInput>
                 
                 <EditorInput>
                     <h4>Optional</h4>
-                    <CreatableSelect {...selectStyleAttrs} value={getSelected(feed.optionalKeywords)} isMulti onChange={(s) => setOptional(getValues(s as Selected[]))}/>
+                    <CreatableSelect {...baseSelectAttrs} value={getSelected(feed.optionalKeywords)} isMulti onChange={(s) => setOptional(getValues(s as Selected[]))}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Excluded</h4>
-                    <CreatableSelect {...selectStyleAttrs} value={getSelected(feed.excludedKeywords)} isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
+                    <CreatableSelect {...baseSelectAttrs} value={getSelected(feed.excludedKeywords)} isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
                 </EditorInput>
             </EditorSection>
             <EditorSection title={CopyProvider.EDITOR_CONTENT_SECTION_TITLE} body={CopyProvider.EDITOR_CONTENT_SECTION_BODY}>
