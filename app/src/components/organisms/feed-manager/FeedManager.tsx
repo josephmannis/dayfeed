@@ -1,11 +1,13 @@
 import React from 'react';
-import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper, NewFeedButton } from './styled';
+import { Editor, Header, EditorPanels, Sidebar, Cell, EditorWrapper, NewFeedButton, FeedSelect } from './styled';
 import { NewsFeed, NewsSource } from '../../../lib/client/types';
 import FeedEditor from '../feed-editor/FeedEditor';
 import { SourceCountryOptions, LanguageOptions, CategoryOptions, Category, Language, SourceCountry } from '../../../lib/api/types';
 import getNewsService from '../../../api/news';
 import { useFeedState, useFeedDispatch } from '../../../state/feedContext';
 import { v4 } from 'uuid';
+import Select from 'react-select';
+import { baseSelectAttrs } from '../../molecules/select/Select';
 
 
 const FeedManager: React.FC = props => {
@@ -55,9 +57,13 @@ const FeedManager: React.FC = props => {
             </Header>
             <EditorPanels>
                 <Sidebar>
-                    {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => {console.log(i); setSelected(i)}}>{f.name}</Cell>)}
+                    {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => setSelected(i)}><p>{f.name}</p></Cell>)}
                     <NewFeedButton onClick={onFeedAdded}>+ New Feed</NewFeedButton>
                 </Sidebar>
+                <FeedSelect>
+
+                <Select value={{label: feeds[selectedFeed].name, value: selectedFeed}} onChange={(s:any) => setSelected(s.value)} options={feeds.map((f, i)=> {return {label: f.name, value: i}})}/>
+                </FeedSelect>
                 <EditorWrapper>
                     { feeds.length > 0 ? 
                         <FeedEditor 
