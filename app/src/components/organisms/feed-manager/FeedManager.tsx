@@ -7,6 +7,7 @@ import getNewsService from '../../../api/news';
 import { useFeedState, useFeedDispatch } from '../../../state/feedContext';
 import { v4 } from 'uuid';
 import Select from 'react-select';
+import { SelectTheme } from '../../molecules/select/Select';
 
 
 const FeedManager: React.FC = props => {
@@ -61,7 +62,7 @@ const FeedManager: React.FC = props => {
                         <NewFeedButton onClick={onFeedAdded}>+ New Feed</NewFeedButton>
                     </Sidebar>
                     <FeedSelect>
-                        <Select value={feeds[selectedFeed] ? {label: feeds[selectedFeed].name, value: selectedFeed} : undefined} onChange={(s:any) => setSelected(s.value)} options={feeds.map((f, i)=> {return {label: f.name, value: i}})}/>
+                        <Select theme={theme => SelectTheme(theme)} value={feeds[selectedFeed] ? {label: feeds[selectedFeed].name, value: selectedFeed} : undefined} onChange={(s:any) => setSelected(s.value)} options={feeds.map((f, i)=> {return {label: f.name, value: i}})}/>
                     </FeedSelect>
                     <EditorWrapper>
                         { feeds.length > 0 ?
