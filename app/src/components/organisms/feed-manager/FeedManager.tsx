@@ -7,7 +7,6 @@ import getNewsService from '../../../api/news';
 import { useFeedState, useFeedDispatch } from '../../../state/feedContext';
 import { v4 } from 'uuid';
 import Select from 'react-select';
-import { baseSelectAttrs } from '../../molecules/select/Select';
 
 
 const FeedManager: React.FC = props => {
@@ -28,7 +27,7 @@ const FeedManager: React.FC = props => {
                 let sources: NewsSource[] = []
                 res.forEach(s => { if (s.id && s.name) sources.push({name: s.name, id: s.id}) })
                 setSources(sources);
-            })
+            }).catch(err => console.log(err))
         }
 
         getSources()
@@ -54,30 +53,30 @@ const FeedManager: React.FC = props => {
         <Editor>
             <Header>
                 <h3>Feeds</h3>
+                <NewFeedButton onClick={onFeedAdded}>+ New Feed</NewFeedButton>
             </Header>
-            <EditorPanels>
-                <Sidebar>
-                    {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => setSelected(i)}><p>{f.name}</p></Cell>)}
-                    <NewFeedButton onClick={onFeedAdded}>+ New Feed</NewFeedButton>
-                </Sidebar>
-                <FeedSelect>
-
-                <Select value={{label: feeds[selectedFeed].name, value: selectedFeed}} onChange={(s:any) => setSelected(s.value)} options={feeds.map((f, i)=> {return {label: f.name, value: i}})}/>
-                </FeedSelect>
-                <EditorWrapper>
-                    { feeds.length > 0 ? 
-                        <FeedEditor 
-                            onFeedChanged={updateFeed}
-                            onFeedDeleted={onFeedDeleted} 
-                            feed={feeds[selectedFeed]} 
-                            sourceOptions={sources} 
-                            countryOptions={SourceCountryOptions.slice()} 
-                            topicOptions={CategoryOptions.slice()} 
-                            languageOptions={LanguageOptions.slice()} 
-                        /> 
-                    : 'You have no Feeds! Create a new one 🌞'}
-                </EditorWrapper>
-            </EditorPanels>
+                <EditorPanels>
+                    <Sidebar>
+                        {feeds.map((f,i) => <Cell key={i} selected={feeds[selectedFeed].id === f.id} onClick={() => setSelected(i)}><p>{f.name}</p></Cell>)}
+                        <NewFeedButton onClick={onFeedAdded}>+ New Feed</NewFeedButton>
+                    </Sidebar>
+                    <FeedSelect>
+                        <Select value={feeds[selectedFeed] ? {label: feeds[selectedFeed].name, value: selectedFeed} : undefined} onChange={(s:any) => setSelected(s.value)} options={feeds.map((f, i)=> {return {label: f.name, value: i}})}/>
+                    </FeedSelect>
+                    <EditorWrapper>
+                        { feeds.length > 0 ?
+                            <FeedEditor 
+                                onFeedChanged={updateFeed}
+                                onFeedDeleted={onFeedDeleted} 
+                                feed={feeds[selectedFeed]} 
+                                sourceOptions={sources} 
+                                countryOptions={SourceCountryOptions.slice()} 
+                                topicOptions={CategoryOptions.slice()} 
+                                languageOptions={LanguageOptions.slice()} 
+                                /> 
+                        : 'You have no Feeds! Create a new one 🌞'}
+                    </EditorWrapper>
+                </EditorPanels>
         </Editor>
     )
 }
