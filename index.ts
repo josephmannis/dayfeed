@@ -12,7 +12,7 @@ const api = new NewsAPI(process.env.NEWSAPI_KEY);
 
 app.use(express.static(path.resolve("./") + "/build/app"));
 
-app.get("/", (req: Request, res: Response): void => {
+app.get("*", (req: Request, res: Response): void => {
     res.sendFile(path.resolve("./") + "/build/app/index.html");
 });
 
