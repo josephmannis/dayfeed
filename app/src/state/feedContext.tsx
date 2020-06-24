@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStorageReducer } from 'react-storage-hooks';
 import { NewsFeed } from '../lib/client/types';
+import { everythingFeed } from './baseState';
 
 /**
  * This is how we manage the global state of the contact list. If you're familiar with Redux, this is similar, just without all the boilerplate.
@@ -45,7 +46,7 @@ function feedReducer(state: State, action: Action) {
 
 function FeedProvider({children}: FeedProviderProps) {
     // This persists the state to local storage
-    const [state, dispatch] = useStorageReducer(localStorage, 'FEED_LIST', feedReducer, { feeds: [] });
+    const [state, dispatch] = useStorageReducer(localStorage, 'FEED_LIST', feedReducer, { feeds: [everythingFeed] });
     
     return (
         <FeedContext.Provider value={state}>

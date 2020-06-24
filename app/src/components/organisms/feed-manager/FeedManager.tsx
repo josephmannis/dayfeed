@@ -8,6 +8,8 @@ import { useFeedState, useFeedDispatch } from '../../../state/feedContext';
 import { v4 } from 'uuid';
 import Select from 'react-select';
 import { SelectTheme } from '../../molecules/select/Select';
+import TextIcon from '../../molecules/text-icon/TextIcon';
+import { CopyProvider } from '../../../assets/strings/strings';
 
 
 const FeedManager: React.FC = props => {
@@ -75,7 +77,7 @@ const FeedManager: React.FC = props => {
                                 topicOptions={CategoryOptions.slice()} 
                                 languageOptions={LanguageOptions.slice()} 
                                 /> 
-                        : 'You have no Feeds! Create a new one 🌞'}
+                        : <TextIcon type='happy-sun' text={CopyProvider.FEED_MANAGER_NO_FEEDS}/>}
                     </EditorWrapper>
                 </EditorPanels>
         </Editor>

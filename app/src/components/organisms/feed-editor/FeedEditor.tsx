@@ -3,7 +3,7 @@ import { NewsFeed, NewsSource, Selected } from '../../../lib/client/types';
 import { Editor, Header, EditorInput, NameInput } from './styled';
 import { TextButton } from '../../atoms/button/Button';
 import EditorSection from '../../molecules/editor-section/EditorSection';
-import { CopyProvider } from '../../../strings/strings';
+import { CopyProvider } from '../../../assets/strings/strings';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import Select from 'react-select';

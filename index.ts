@@ -12,10 +12,6 @@ const api = new NewsAPI(process.env.NEWSAPI_KEY);
 
 app.use(express.static(path.resolve("./") + "/build/app"));
 
-app.get("*", (req: Request, res: Response): void => {
-    res.sendFile(path.resolve("./") + "/build/app/index.html");
-});
-
 const buildQuery = query => {
     const { q, category, country, sources, language, sortBy, pageSize, page } = query;
 
@@ -45,5 +41,9 @@ app.get("/sources", (req: Request, res: Response): void => {
     api.v2.sources(buildQuery(req.query))
     .then(response => res.send(response))
 })
+
+app.get("*", (req: Request, res: Response): void => {
+    res.sendFile(path.resolve("./") + "/build/app/index.html");
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
