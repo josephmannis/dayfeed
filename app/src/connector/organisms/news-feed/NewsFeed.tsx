@@ -6,8 +6,9 @@ import DisconnectedNewsFeed from '../../../components/organisms/news-feed/NewsFe
 import { useFeedState } from '../../../state/feedContext';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { colors } from '../../../css/var/color';
 import { SelectTheme, FeedSelectStyle } from '../../../components/molecules/select/Select';
+import TextIcon from '../../../components/molecules/text-icon/TextIcon';
+import { CopyProvider } from '../../../assets/strings/strings';
 
 
 const NewsFeed: React.FC = () => {
@@ -47,7 +48,6 @@ const NewsFeed: React.FC = () => {
             newsSerivce.searchTopHeadlines(query, 30, 1)
             .then(res => setArticles(
                 res.articles.map(a => {
-                    console.log(a.urlToImage)
                     return {
                         title: a.title ? a.title : 'Failed to load title',
                         id: a.url ? a.url : '',
@@ -68,14 +68,14 @@ const NewsFeed: React.FC = () => {
             {
                 feeds.length !== 0 && 
                 <Select {...selectStyleAttrs}
-                        theme={theme => {console.log(theme); return SelectTheme(theme)}}
+                        theme={theme => SelectTheme(theme)}
                         styles={FeedSelectStyle}
                         value={{label: feeds[selectedFeed].name, value: selectedFeed}}
                         options={feeds.map((f, i) => {return {label: f.name, value: i}})}
                         onChange={(s) => setSelected((s as {label: string, value: number}).value)}
                 />
             }
-            {!error && <DisconnectedNewsFeed articles={articles}/>}
+            {error ? <DisconnectedNewsFeed articles={articles}/> : <TextIcon type='sad-sun' text={CopyProvider.NEWS_FEED_ERROR}/>}
         </>
     )
 }
