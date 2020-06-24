@@ -20,13 +20,16 @@ export const FeedSelectStyle: Partial<Styles> = {
         return {
             ...provided,
             fontFamily: 'Libre Baskerville, serif',
+            paddingBottom: '1em'
             
         }
     },
+
     singleValue: (provided, state) => {
         return {
             ...provided,
             fontSize: '1.5em',
+            padding: '.5em 0'
         }
     },
     control: (provided, state) => {
