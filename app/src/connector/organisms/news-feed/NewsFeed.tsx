@@ -9,6 +9,7 @@ import makeAnimated from 'react-select/animated';
 import { SelectTheme, FeedSelectStyle } from '../../../components/molecules/select/Select';
 import TextIcon from '../../../components/molecules/text-icon/TextIcon';
 import { CopyProvider } from '../../../assets/strings/strings';
+import { FeedSelect } from './styled';
 
 
 const NewsFeed: React.FC = () => {
@@ -34,7 +35,6 @@ const NewsFeed: React.FC = () => {
         async function fetchFeed() { 
             let newsSerivce = getNewsService();
             let feed = feeds[selectedFeed];
-            if (!feed) return;
 
             let query: HeadlineQuery = {
                 requiredKeywords: feed.includedKeywords,
@@ -45,7 +45,10 @@ const NewsFeed: React.FC = () => {
                 country: feed.country ? feed.country as HeadlineCountry : undefined,
                 sources: feed.sources.map(s => s.id)
             }
-            newsSerivce.searchTopHeadlines(query, 30, 1)
+            return newsSerivce.searchTopHeadlines(query, 30, 1)
+        }
+
+        fetchFeed()
             .then(res => setArticles(
                 res.articles.map(a => {
                     return {
@@ -57,25 +60,29 @@ const NewsFeed: React.FC = () => {
                         sourceName: a.source?.name ? a.source?.name : 'Unknown source'
                     }
                 })
-            )).catch(error => {console.log(error); setError('Failed to fetch feed.')})
-        }
-
-        fetchFeed()
+            )).catch(error => setError('Failed to fetch feed.'))
     }, [selectedFeed, feeds])
 
     return (
         <>
-            {
-                feeds.length !== 0 && 
-                <Select {...selectStyleAttrs}
+            <FeedSelect>
+                {feeds.length !== 0 &&
+                    <Select {...selectStyleAttrs}
                         theme={theme => SelectTheme(theme)}
                         styles={FeedSelectStyle}
                         value={{label: feeds[selectedFeed].name, value: selectedFeed}}
                         options={feeds.map((f, i) => {return {label: f.name, value: i}})}
                         onChange={(s) => setSelected((s as {label: string, value: number}).value)}
-                />
+                    />
+                }
+            </FeedSelect>
+            { error ? 
+                <TextIcon 
+                    type={feeds.length === 0 ? 'happy-sun' : 'sad-sun'} 
+                    text={feeds.length === 0 ? CopyProvider.NEWS_FEED_NO_FEEDS : CopyProvider.NEWS_FEED_ERROR}
+                /> : 
+                <DisconnectedNewsFeed articles={articles}/> 
             }
-            {error ? <DisconnectedNewsFeed articles={articles}/> : <TextIcon type='sad-sun' text={CopyProvider.NEWS_FEED_ERROR}/>}
         </>
     )
 }
