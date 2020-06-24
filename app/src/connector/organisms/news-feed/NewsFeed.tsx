@@ -63,14 +63,6 @@ const NewsFeed: React.FC = () => {
         fetchFeed()
     }, [selectedFeed, feeds])
 
-    if (error) {
-        return (
-            <>
-                {error}
-            </>
-        )
-    }
-
     return (
         <>
             {
@@ -83,7 +75,7 @@ const NewsFeed: React.FC = () => {
                         onChange={(s) => setSelected((s as {label: string, value: number}).value)}
                 />
             }
-            <DisconnectedNewsFeed articles={articles}/>
+            {!error && <DisconnectedNewsFeed articles={articles}/>}
         </>
     )
 }
