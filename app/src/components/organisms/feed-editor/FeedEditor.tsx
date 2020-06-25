@@ -28,12 +28,6 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             includedKeywords: keywords
         })
     }
-    const setOptional = (keywords: string[]) => {
-        updateFeed({
-            ...feed,
-            optionalKeywords: keywords
-        })
-    }
     const setExcluded = (keywords: string[]) => {
         updateFeed({
             ...feed,
@@ -72,17 +66,10 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
 
     const getValues = (options?: Selected[]) => options ? options.map(o => o.value) : [];
     const getSelected = (options?: string[]) => options ? options.map(o => {return {label: o, value: o}}) : []
-    const toSelected = (option?: string) => { return { label: option, value: option } }
+    const toSelected = (option?: string) => { return { label: option ? option : 'Select...', value: option } }
     const animatedComponents = makeAnimated();
 
     const sourcesToSelects = (sources: NewsSource[]) => sources.map(s => { return {label: s.name, value: s.id} }) 
-    const selectStyleAttrs = {
-        components: { 
-            DropdownIndicator:() => null, 
-            IndicatorSeparator:() => null,
-            ...makeAnimated()
-        }
-    }
 
     return (
         <Editor>
@@ -93,17 +80,12 @@ const FeedEditor: React.FC<IFeedEditorFormProps> = props => {
             <EditorSection title={CopyProvider.EDITOR_KEYWORDS_SECTION_TITLE} body={CopyProvider.EDITOR_KEYWORDS_SECTION_BODY}>
                 <EditorInput>
                     <h4>Required</h4>
-                    <CreatableSelect {...baseSelectAttrs} value={getSelected(feed.includedKeywords)} isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
-                </EditorInput>
-                
-                <EditorInput>
-                    <h4>Optional</h4>
-                    <CreatableSelect {...baseSelectAttrs} value={getSelected(feed.optionalKeywords)} isMulti onChange={(s) => setOptional(getValues(s as Selected[]))}/>
+                    <CreatableSelect {...baseSelectAttrs} placeholder={CopyProvider.EDITOR_NO_KEYWORDS} noOptionsMessage={() => CopyProvider.EDITOR_NO_KEYWORDS} value={getSelected(feed.includedKeywords)} isMulti onChange={(s) => setRequired(getValues(s as Selected[]))}/>
                 </EditorInput>
 
                 <EditorInput>
                     <h4>Excluded</h4>
-                    <CreatableSelect {...baseSelectAttrs} value={getSelected(feed.excludedKeywords)} isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
+                    <CreatableSelect {...baseSelectAttrs} placeholder={CopyProvider.EDITOR_NO_KEYWORDS} noOptionsMessage={() => CopyProvider.EDITOR_NO_KEYWORDS} value={getSelected(feed.excludedKeywords)} isMulti onChange={(s) => setExcluded(getValues(s as Selected[]))}/>
                 </EditorInput>
             </EditorSection>
             <EditorSection title={CopyProvider.EDITOR_CONTENT_SECTION_TITLE} body={CopyProvider.EDITOR_CONTENT_SECTION_BODY}>

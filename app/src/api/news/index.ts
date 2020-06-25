@@ -68,11 +68,10 @@ function getArticles(location: location, query: NewsQuery | HeadlineQuery, pageS
 
 function getKeywordString(query: NewsQuery | HeadlineQuery): string {
     let requiredKeywords = query.requiredKeywords.join('AND');
-    let optionalKeywords = query.optionalKeywords.join('OR');
     let excludedKeywords = query.excludedKeywords.join('NOT');
 
-    if (requiredKeywords === '' && optionalKeywords === '' && excludedKeywords === '') return ''
-    return encodeURI(`&q=${requiredKeywords}${optionalKeywords}${excludedKeywords}`)
+    if (requiredKeywords === '' && excludedKeywords === '') return ''
+    return encodeURI(`&q=${requiredKeywords}${excludedKeywords}`)
 }
 
 function cachedFetch(url: string): Promise<Response> {
