@@ -17,7 +17,6 @@ export type NewsFeed = {
     country?: string;
     includedKeywords: string[];
     excludedKeywords: string[];
-    optionalKeywords: string[];
     language?: string;
     sources: NewsSource[];
     topic?: string;

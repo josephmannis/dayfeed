@@ -7,7 +7,6 @@ export const everythingFeed: NewsFeed = {
     country: 'us',
     includedKeywords: [],
     excludedKeywords: [],
-    optionalKeywords: [],
     language: 'en',
     sources: [],
     topic: undefined

@@ -43,7 +43,6 @@ const FeedManager: React.FC = props => {
             id: v4(),
             name: 'New Feed',
             includedKeywords: [],
-            optionalKeywords: [],
             excludedKeywords: [],
             sources: []
         }

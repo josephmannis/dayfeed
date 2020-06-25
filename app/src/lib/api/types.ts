@@ -1,7 +1,6 @@
 export type NewsQuery = {
     language?: Language;
     requiredKeywords: string[];
-    optionalKeywords: string[];
     excludedKeywords: string[];
     sources: string[];
 }

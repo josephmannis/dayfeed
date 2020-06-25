@@ -38,7 +38,6 @@ const NewsFeed: React.FC = () => {
 
             let query: HeadlineQuery = {
                 requiredKeywords: feed.includedKeywords,
-                optionalKeywords: feed.optionalKeywords,
                 excludedKeywords: feed.excludedKeywords,
                 category: feed.topic ? feed.topic as Category : undefined,
                 language: feed.language ? feed.language as Language : undefined,
