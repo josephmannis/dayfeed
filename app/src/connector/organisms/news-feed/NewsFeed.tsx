@@ -9,7 +9,7 @@ import makeAnimated from 'react-select/animated';
 import { SelectTheme, FeedSelectStyle } from '../../../components/molecules/select/Select';
 import TextIcon from '../../../components/molecules/text-icon/TextIcon';
 import { CopyProvider } from '../../../assets/strings/strings';
-import { FeedSelect } from './styled';
+import { FeedSelect, FeedWrapper } from './styled';
 
 
 const NewsFeed: React.FC = () => {
@@ -76,13 +76,15 @@ const NewsFeed: React.FC = () => {
                     />
                 }
             </FeedSelect>
-            { error ? 
-                <TextIcon 
-                    type={feeds.length === 0 ? 'happy-sun' : 'sad-sun'} 
-                    text={feeds.length === 0 ? CopyProvider.NEWS_FEED_NO_FEEDS : CopyProvider.NEWS_FEED_ERROR}
-                /> : 
-                <DisconnectedNewsFeed articles={articles}/> 
-            }
+            <FeedWrapper error={error !== undefined || articles.length === 0}>
+                { error ? 
+                    <TextIcon 
+                        type={feeds.length === 0 ? 'happy-sun' : 'sad-sun'} 
+                        text={feeds.length === 0 ? CopyProvider.NEWS_FEED_NO_FEEDS : CopyProvider.NEWS_FEED_ERROR}
+                    /> : 
+                    <DisconnectedNewsFeed articles={articles}/> 
+                }
+            </FeedWrapper>
         </>
     )
 }
